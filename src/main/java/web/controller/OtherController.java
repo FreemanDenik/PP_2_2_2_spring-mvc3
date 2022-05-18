@@ -3,26 +3,19 @@ package web.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import web.models.Car;
-
-import java.util.Arrays;
-import java.util.List;
+import web.services.CarService;
+import web.services.ICarService;
 
 @Controller
 public class OtherController {
 
+    private ICarService service;
+    public OtherController(){
+        service = new CarService();
+    }
     @GetMapping("/cars")
     public String carsView(ModelMap map, int count){
-
-
-        List<Car> carList = Arrays.asList(
-                new Car(1, "Audi"),
-                new Car(1, "Honda"),
-                new Car(1, "Uas"),
-                new Car(1, "Mers"),
-                new Car(count, "Subaru")
-        ).stream().limit(count).toList();
-        map.addAttribute("model", carList);
+        map.addAttribute("model", service.getCars(count));
         return "cars";
     }
 }
